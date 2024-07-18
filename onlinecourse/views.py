@@ -113,7 +113,7 @@ def enroll(request, course_id):
 def submit(request, course_id):
     if request.method == 'POST':
         course = get_object_or_404(Course, pk=course_id)
-        user = request.POST['username']
+        user = request.user
         enrollment = Enrollment.objects.get(user=user, course=course)
         submission = Submission.objects.create(enrollment=enrollment)
         choices = extract_answers(request)
@@ -147,7 +147,7 @@ def show_exam_result(request, course_id, submission_id):
     total_score = 0
     for choice in choices:
       if choice.is_correct:
-          total_score += choice.question.grade
+          total_score += choice.question.grade_point
 
     context['course'] = course
     context['grade'] = total_score
